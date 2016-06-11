@@ -10,7 +10,9 @@ $ ->
   $layout = $('body')
   for image in images
     c = image.color
-    $image = "<div class=\"i i#{image.id}\" style=\"background-color: rgb(#{c},#{c},#{c});\"></div>"
+    style = "background-color: rgb(#{c},#{c},#{c});"
+    $image = "<div class=\"i i#{image.id}\" style=\"#{style}\"></div>"
     $layout.append($image)
-  console.log 'ICI ? '
-  $layout.append('<style>'+(new photolayout.default(line_height: 50, margin: 0)).add(images).css()+'</style>')
+  photolayout = new window.photolayout.default(line_height: 50, margin: 0)
+  photolayout.add(images)
+  $layout.append('<style>'+photolayout.css()+'</style>')

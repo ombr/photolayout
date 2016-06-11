@@ -53,11 +53,12 @@ class Layout
     css=''
     items = @getItems()
     for item in items
-      # css += "#{@_selector}#{item.o.id}{width: #{item.w}%;  padding-top: #{item.h}%;}\n"
+      # css += "#{@_selector}#{item.o.id}{width: #{item.w}%; padding-top: #{item.h}%;}\n"
       css += "#{@_selector}#{item.o.id}{top: #{item.offset_y}%; left: #{item.offset_x}%;width: #{item.w}%; padding-top: #{item.h}%;}\n"
     end_of_line_selectors = []
     for line in @_lines
-      end_of_line_selectors.push("#{@_selector}#{line._objects[line._objects.length-1].id}")
+      [..., last] = line._objects
+      end_of_line_selectors.push("#{@_selector}#{last.id}")
     css += "#{end_of_line_selectors.join(', ')}{ margin-right: 0; }\n"
     css
 
