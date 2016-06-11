@@ -54,13 +54,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _layout = __webpack_require__(2);
+	var _layout = __webpack_require__(4);
 
 	var _layout2 = _interopRequireDefault(_layout);
 
@@ -76,14 +76,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (!this._options.margin) {
 	      this._options.margin = 5;
 	    }
+	    if (!this._options.max_width) {
+	      this._options.max_width = 2000;
+	    }
+	    if (!this._options.min_width) {
+	      this._options.min_width = 100;
+	    }
+	    if (!this._options.tolerance) {
+	      this._options.tolerance = 50;
+	    }
 	    this._photos = [];
 	  }
 
 	  ResponsiveLayout.prototype.add = function (photo) {
-	    var i, len, p;
+	    var j, len, p;
 	    if (photo instanceof Array) {
-	      for (i = 0, len = photo.length; i < len; i++) {
-	        p = photo[i];
+	      for (j = 0, len = photo.length; j < len; j++) {
+	        p = photo[j];
 	        this.add(p);
 	      }
 	      return this;
@@ -92,23 +101,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this;
 	  };
 
-	  ResponsiveLayout.prototype.css_for_width = function (width) {
+	  ResponsiveLayout.prototype.layout_for = function (width) {
 	    var layout;
 	    layout = new _layout2.default(this._options.line_height / width, this._options.margin / width * 100);
 	    layout.add(this._photos);
-	    return layout.css();
+	    return layout;
 	  };
 
-	  ResponsiveLayout.prototype.css = function (breakpoints) {
-	    var breakpoint, css, first, i, len;
-	    if (breakpoints == null) {
-	      breakpoints = [200, 500, 800, 1000, 1500];
+	  ResponsiveLayout.prototype.breakpoints = function () {
+	    if (this._breakpoints != null) {
+	      return this._breakpoints;
 	    }
-	    first = breakpoints.splice(0, 1)[0];
-	    css = this.css_for_width(first);
-	    for (i = 0, len = breakpoints.length; i < len; i++) {
-	      breakpoint = breakpoints[i];
-	      css += "@media (min-width: " + breakpoint + "px){\n" + this.css_for_width(breakpoint) + "}\n";
+	    this.css();
+	    return this._breakpoints;
+	  };
+
+	  ResponsiveLayout.prototype.css = function () {
+	    var css, i, layout, width;
+	    width = this._options.max_width;
+	    css = '';
+	    i = 0;
+	    this._breakpoints = [];
+	    while (width > this._options.min_width) {
+	      this._breakpoints.push(width);
+	      layout = this.layout_for(width);
+	      css += "@media (max-width: " + width + "px){\n" + layout.css() + "}\n";
+	      i += 1;
+	      if (i > 50) {
+	        break;
+	      }
+	      width -= this._options.tolerance * layout.min_line_ratio();
 	    }
 	    return css;
 	  };
@@ -120,7 +142,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 1 */,
-/* 2 */
+/* 2 */,
+/* 3 */,
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -129,7 +153,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _line = __webpack_require__(3);
+	var _line = __webpack_require__(5);
 
 	var _line2 = _interopRequireDefault(_line);
 
@@ -147,6 +171,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._current_line = new _line2.default(this);
 	    this._lines = [this._current_line];
 	  }
+
+	  Layout.prototype.min_line_ratio = function () {
+	    var i, len, line, ratio, ref;
+	    ratio = this._lines[0].ratio();
+	    ref = this._lines;
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      line = ref[i];
+	      ratio = Math.min(line.ratio(), ratio);
+	    }
+	    return ratio;
+	  };
 
 	  Layout.prototype.add = function (object) {
 	    var i, len, o;
@@ -226,7 +261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Layout.prototype.css_for_items = function () {
-	    var css, end_of_line_selectors, i, item, items, j, len, len1, line, ref;
+	    var css, end_of_line_selectors, i, item, items, j, last, len, len1, line, ref, ref1;
 	    css = '';
 	    items = this.getItems();
 	    for (i = 0, len = items.length; i < len; i++) {
@@ -237,7 +272,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ref = this._lines;
 	    for (j = 0, len1 = ref.length; j < len1; j++) {
 	      line = ref[j];
-	      end_of_line_selectors.push("" + this._selector + line._objects[line._objects.length - 1].id);
+	      ref1 = line._objects, last = ref1[ref1.length - 1];
+	      end_of_line_selectors.push("" + this._selector + last.id);
 	    }
 	    css += end_of_line_selectors.join(', ') + "{ margin-right: 0; }\n";
 	    return css;
@@ -250,7 +286,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 
 /***/ },
-/* 3 */
+/* 5 */
 /***/ function(module, exports) {
 
 	"use strict";
