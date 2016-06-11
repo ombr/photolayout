@@ -5,6 +5,11 @@ class Layout
     @_margin =  @_margin * 1.0
     @_current_line = new Line(this)
     @_lines = [@_current_line]
+  min_line_ratio: ->
+    ratio = @_lines[0].ratio()
+    for line in @_lines
+      ratio = Math.min(line.ratio(), ratio)
+    return ratio
   add: (object)->
     if object instanceof Array
       for o in object

@@ -1,18 +1,60 @@
 `import $ from 'jquery';`
+`import _ from 'lodash';`
 $ ->
+  $style = $('<style></style>')
+  $body = $('body')
+  $body.append($style)
   images = []
-  for i in [0..5000]
-    images.push {
-      id: i
-      ratio: 0.2+Math.random()*1.5
-      color: Math.round(Math.random()*75) + 50
-    }
-  $layout = $('body')
-  for image in images
-    c = image.color
-    style = "background-color: rgb(#{c},#{c},#{c});"
-    $image = "<div class=\"i i#{image.id}\" style=\"#{style}\"></div>"
-    $layout.append($image)
-  photolayout = new window.photolayout.default(line_height: 50, margin: 0)
-  photolayout.add(images)
-  $layout.append('<style>'+photolayout.css()+'</style>')
+
+  processing_images = false
+  reload_images = ->
+    return if processing_images
+    processing_images = true
+    $('.i').remove()
+    images.length = 0
+    for i in [0..Math.min(1000, $('#images').val()-1)]
+      images.push {
+        id: i
+        ratio: 0.2+Math.random()*1.5
+      }
+      c = Math.round(Math.random()*75) + 50
+      style = "background-color: rgb(#{c},#{c},#{c});"
+      $body.append("<div class=\"i i#{i}\" style=\"#{style}\"></div>")
+    reload_layout()
+    processing_images = false
+
+  processing_layout = false
+  reload_layout = ->
+    return if processing_layout
+    processing = true
+    $layout = $('body')
+    photolayout = new window.photolayout.default(
+      line_height: $('#line_height').val(),
+      margin: $('#margin').val(),
+    )
+    photolayout.add(images)
+    console.log photolayout.breakpoints()
+    $style.html(photolayout.css())
+    processing_layout = false
+    reload_stats()
+
+  reload_stats = _.throttle(->
+    max = 0
+    sum = 0
+    $items = $('.i')
+    $items.each (i, e)->
+      height = $(e).outerHeight()
+      max = Math.max(height, max)
+      sum += height
+    $('#height_max').html(Math.round(max, 2))
+    $('#height_avg').html(Math.round(sum/$items.length, 2))
+  , 200)
+  $(window).on 'resize', reload_stats
+
+  on_change = (selector, callback)->
+    $body.on 'change', selector, callback
+    $body.on 'keyup', selector, callback
+  on_change('#images', reload_images)
+  reload_images()
+  on_change('#line_height', reload_layout)
+  on_change('#margin', reload_layout)

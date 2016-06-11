@@ -1,0 +1,43 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    title Photolayout by Evlaa
+    link(href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet")
+    style
+      | .menu{
+      |   position: absolute;
+      |   top: 0;
+      |   right: 0;
+      |   width: 400px;
+      |   max-width: 100%;
+      |   background: rgba(255, 255, 255, 0.9);
+      | }
+  body
+    script(src="dist/photolayout.js")
+    script(src="dist/demo.js")
+    .menu
+      .container-fluid
+        .row
+          .col-xs-12
+            h1 Photolayout
+            p A super-fast responsive library for positioning images, preserve ratio and order.
+            .form-group
+              label(for="images") Images:
+              input.form-control#images(name="images" type="number" value="100" max="1000" min="0")
+            .form-group
+              label(for="line_height") Max line height:
+              input.form-control#line_height(name="line_height" type="number" value="100" min="0")
+            .form-group
+              label(for="margin") Margin :
+              input.form-control#margin(name="margin" type="number" value="3.0" min="0" max="100")
+            p
+              ="Average element height: "
+              span#height_avg 0
+              | px
+            p
+              | Max element height :
+              span#height_max 0
+              | px
