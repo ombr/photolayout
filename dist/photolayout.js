@@ -126,7 +126,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    while (width > this._options.min_width) {
 	      this._breakpoints.push(width);
 	      layout = this.layout_for(width);
-	      css += "@media (max-width: " + width + "px){\n" + layout.css() + "}\n";
+	      css += "@media (max-width: " + Math.round(width) + "px){\n" + layout.css() + "}\n";
 	      i += 1;
 	      if (i > 50) {
 	        break;

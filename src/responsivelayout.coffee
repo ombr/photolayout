@@ -33,7 +33,7 @@ class ResponsiveLayout
     while width > @_options.min_width
       @_breakpoints.push(width)
       layout = @layout_for(width)
-      css += "@media (max-width: #{width}px){\n\
+      css += "@media (max-width: #{Math.round(width)}px){\n\
       #{layout.css()}\
       }\n"
       i+=1
