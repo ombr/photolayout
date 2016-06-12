@@ -7,7 +7,7 @@ order.
 
 # Installation
 
-project:
+npm:
 `npm install --save photolayout`
 
 bower:
@@ -15,7 +15,7 @@ bower:
 
 # Examples
 
-Take a look at the [`demo source code`](https://github.com/ombr/photolayout/tree/master/src/demo.coffee)
+Take a look at the [`demo`](https://luc.boissaye.fr/photolayout/) [`demo source code`](https://github.com/ombr/photolayout/tree/master/src/)
 Photolayout is used on [`Evlaa`](https://www.evlaa.com)
 
 ## License
