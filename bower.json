@@ -1,0 +1,24 @@
+{
+  "name": "photolayout",
+  "description": "Photolayout from Evlaa",
+  "main": "dist/photolayout.js",
+  "authors": [
+    "Luc Boissaye"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "Photos",
+    "Layout",
+    "Responsive"
+  ],
+  "homepage": "https://github.com/ombr/photolayout",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "src/demo*",
+    "src/index*"
+  ]
+}
