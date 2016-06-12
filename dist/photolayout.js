@@ -349,8 +349,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Line.prototype.ratio = function () {
-	    if (Math.abs(this._objects_ratio - 1 / this._layout._zoom) / this._objects_ratio > 1) {
-	      return 1 / this._layout._zoom;
+	    if (this._layout._lines.indexOf(this) === this._layout._lines.length - 1) {
+	      if (Math.abs(this._objects_ratio - 1 / this._layout._zoom) / this._objects_ratio > 1) {
+	        return 1 / this._layout._zoom;
+	      } else {
+	        return this._objects_ratio;
+	      }
 	    } else {
 	      return this._objects_ratio;
 	    }

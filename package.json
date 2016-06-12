@@ -5,7 +5,7 @@
   "main": "dist/photolayout.js",
   "scripts": {
     "test": "coffeelint src",
-    "build": "webpack && jade index.jade",
+    "build": "webpack",
     "start": "webpack-dev-server"
   },
   "repository": {
