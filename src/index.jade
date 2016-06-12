@@ -24,16 +24,23 @@ html(lang="en")
               .form-group
                 label.control-label.col-xs-6(for="line_height") Max line height:
                 .col-xs-6
-                  input.form-control#line_height(name="line_height" type="number" value="100" min="0")
+                  input.form-control#line_height(name="line_height" type="number" value="100" min="25")
               .form-group
                 label.control-label.col-xs-6(for="margin") Margin :
                 .col-xs-6
                   input.form-control#margin(name="margin" type="number" value="3.0" min="0" max="100")
             p
+              ="Breakpoints: "
+              span#breakpoints -
+            p
+              ="CSS length : "
+              span#css_length -
+              =" chars"
+            p
               ="Average element height: "
               span#height_avg 0
               | px
             p
-              | Max element height :
+              = "Max element height: "
               span#height_max 0
               | px

@@ -50,9 +50,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -65,6 +64,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _layout2 = _interopRequireDefault(_layout);
 
+	var _css = __webpack_require__(10);
+
+	var _css2 = _interopRequireDefault(_css);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var ResponsiveLayout;
@@ -74,66 +77,73 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var base;
 	    this._options = _options != null ? _options : {};
 	    (base = this._options).line_height || (base.line_height = 200);
-	    if (!this._options.margin) {
+	    if (this._options.margin == null) {
 	      this._options.margin = 5;
 	    }
-	    if (!this._options.max_width) {
-	      this._options.max_width = 2000;
+	    if (this._options.max_width == null) {
+	      this._options.max_width = 2500;
 	    }
-	    if (!this._options.min_width) {
-	      this._options.min_width = 100;
+	    if (this._options.min_width == null) {
+	      this._options.min_width = 200;
 	    }
-	    if (!this._options.tolerance) {
-	      this._options.tolerance = 50;
+	    if (this._options.tolerance == null) {
+	      this._options.tolerance = 0.3;
 	    }
 	    this._photos = [];
+	    this._layouts = void 0;
 	  }
 
+	  ResponsiveLayout.prototype.getLayouts = function () {
+	    var layout, max, min, ref, tolerance, width;
+	    if (this._layouts != null) {
+	      return this._layouts;
+	    }
+	    this._layouts = {};
+	    width = this._options.max_width;
+	    while (width > this._options.min_width) {
+	      layout = new _layout2.default(this._options.line_height / width, this._options.margin / width * 100);
+	      layout.add(this._photos);
+	      this._layouts[width] = layout;
+	      ref = layout.min_max_line_ratio(), min = ref[0], max = ref[1];
+	      tolerance = width - width * this._options.tolerance;
+	      width -= Math.round(tolerance / min);
+	    }
+	    return this._layouts;
+	  };
+
 	  ResponsiveLayout.prototype.add = function (photo) {
-	    var j, len, p;
+	    var i, len, p;
 	    if (photo instanceof Array) {
-	      for (j = 0, len = photo.length; j < len; j++) {
-	        p = photo[j];
+	      for (i = 0, len = photo.length; i < len; i++) {
+	        p = photo[i];
 	        this.add(p);
 	      }
 	      return this;
 	    }
 	    this._photos.push(photo);
+	    this._layouts = void 0;
 	    return this;
 	  };
 
 	  ResponsiveLayout.prototype.layout_for = function (width) {
-	    var layout;
-	    layout = new _layout2.default(this._options.line_height / width, this._options.margin / width * 100);
-	    layout.add(this._photos);
 	    return layout;
 	  };
 
 	  ResponsiveLayout.prototype.breakpoints = function () {
-	    if (this._breakpoints != null) {
-	      return this._breakpoints;
-	    }
-	    this.css();
-	    return this._breakpoints;
+	    return Object.keys(this.getLayouts()).sort(function (a, b) {
+	      return b - a;
+	    });
 	  };
 
 	  ResponsiveLayout.prototype.css = function () {
-	    var css, i, layout, width;
-	    width = this._options.max_width;
-	    css = '';
-	    i = 0;
-	    this._breakpoints = [];
-	    while (width > this._options.min_width) {
-	      this._breakpoints.push(width);
-	      layout = this.layout_for(width);
-	      css += "@media (max-width: " + Math.round(width) + "px){\n" + layout.css() + "}\n";
-	      i += 1;
-	      if (i > 50) {
-	        break;
-	      }
-	      width -= this._options.tolerance * layout.min_line_ratio();
+	    var css, i, len, ref, width;
+	    css = new _css2.default();
+	    ref = this.breakpoints();
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      width = ref[i];
+	      css.add_block(this._layouts[width].css(), "@media (max-width: " + width + "px)");
 	    }
-	    return css;
+	    return css.css();
 	  };
 
 	  return ResponsiveLayout;
@@ -142,8 +152,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = ResponsiveLayout;
 
 /***/ },
-
-/***/ 8:
+/* 1 */,
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -156,9 +172,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _line2 = _interopRequireDefault(_line);
 
+	var _css = __webpack_require__(10);
+
+	var _css2 = _interopRequireDefault(_css);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	;
+
 	var Layout;
 
 	Layout = function () {
@@ -170,17 +191,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._current_line = new _line2.default(this);
 	    this._lines = [this._current_line];
 	  }
-
-	  Layout.prototype.min_line_ratio = function () {
-	    var i, len, line, ratio, ref;
-	    ratio = this._lines[0].ratio();
-	    ref = this._lines;
-	    for (i = 0, len = ref.length; i < len; i++) {
-	      line = ref[i];
-	      ratio = Math.min(line.ratio(), ratio);
-	    }
-	    return ratio;
-	  };
 
 	  Layout.prototype.add = function (object) {
 	    var i, len, o;
@@ -255,27 +265,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return height;
 	  };
 
+	  Layout.prototype.min_max_line_ratio = function () {
+	    var i, len, line, max, min, ref;
+	    min = max = this._lines[0].ratio();
+	    ref = this._lines;
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      line = ref[i];
+	      min = Math.min(line.ratio(), min);
+	      max = Math.max(line.ratio(), max);
+	    }
+	    return [min, max];
+	  };
+
 	  Layout.prototype.css = function () {
-	    return this._selector + "{float: left; margin: 0 " + this._margin + "% " + this._margin + "% 0; }\n" + this.css_for_items() + ".layout-container{ padding-bottom: " + this.height() + "% }";
+	    return new _css2.default().add_rules(this._selector, {
+	      float: 'left',
+	      margin: "0 " + this._margin + "% " + this._margin + "% 0"
+	    }).add_block(this.css_for_items()).css();
 	  };
 
 	  Layout.prototype.css_for_items = function () {
-	    var css, end_of_line_selectors, i, item, items, j, last, len, len1, line, ref, ref1;
-	    css = '';
-	    items = this.getItems();
-	    for (i = 0, len = items.length; i < len; i++) {
-	      item = items[i];
-	      css += "" + this._selector + item.o.id + "{top: " + item.offset_y + "%; left: " + item.offset_x + "%;width: " + item.w + "%; padding-top: " + item.h + "%;}\n";
-	    }
+	    var css, end_of_line_selectors, i, item, j, len, len1, line, line_selectors, ref, ref1, selector;
+	    css = new _css2.default();
 	    end_of_line_selectors = [];
 	    ref = this._lines;
-	    for (j = 0, len1 = ref.length; j < len1; j++) {
-	      line = ref[j];
-	      ref1 = line._objects, last = ref1[ref1.length - 1];
-	      end_of_line_selectors.push("" + this._selector + last.id);
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      line = ref[i];
+	      line_selectors = [];
+	      ref1 = line.getItems();
+	      for (j = 0, len1 = ref1.length; j < len1; j++) {
+	        item = ref1[j];
+	        selector = this._selector + item.o.id;
+	        css.add_rules(selector, {
+	          width: item.w + '%'
+	        });
+	        line_selectors.push(selector);
+	      }
+	      css.add_rules(line_selectors.join(','), {
+	        'padding-top': line.height() + '%'
+	      });
+	      end_of_line_selectors.push(selector);
 	    }
-	    css += end_of_line_selectors.join(', ') + "{ margin-right: 0; }\n";
-	    return css;
+	    if (this._margin > 0) {
+	      css.add_rules(end_of_line_selectors.join(','), {
+	        'margin-right': 0
+	      });
+	    }
+	    return css.css();
 	  };
 
 	  return Layout;
@@ -285,8 +321,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 
 /***/ },
-
-/***/ 9:
+/* 9 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -377,8 +412,52 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = Line;
 
-/***/ }
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
 
-/******/ })
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var Css;
+
+	Css = function () {
+	  function Css() {
+	    this._css = '';
+	  }
+
+	  Css.prototype.add_block = function (css, wrapper) {
+	    if (wrapper != null) {
+	      this._css += wrapper + "{" + css + "}";
+	    } else {
+	      this._css += css;
+	    }
+	    return this;
+	  };
+
+	  Css.prototype.add_rules = function (selector, rules) {
+	    var css, property, value;
+	    css = '';
+	    for (property in rules) {
+	      value = rules[property];
+	      css += property + ":" + value + ";";
+	    }
+	    this.add_block(css, selector);
+	    return this;
+	  };
+
+	  Css.prototype.css = function () {
+	    return this._css;
+	  };
+
+	  return Css;
+	}();
+
+	exports.default = Css;
+
+/***/ }
+/******/ ])
 });
 ;

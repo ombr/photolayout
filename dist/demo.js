@@ -108,19 +108,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	  processing_layout = false;
 	  reload_layout = function reload_layout() {
-	    var $layout, photolayout, processing;
+	    var $layout, css, photolayout, processing;
 	    if (processing_layout) {
 	      return;
 	    }
 	    processing = true;
 	    $layout = (0, _jquery2.default)('body');
 	    photolayout = new window.photolayout["default"]({
-	      line_height: (0, _jquery2.default)('#line_height').val(),
-	      margin: (0, _jquery2.default)('#margin').val()
+	      line_height: Math.max(25, (0, _jquery2.default)('#line_height').val()),
+	      margin: Math.max(0, Math.min(100, (0, _jquery2.default)('#margin').val()))
 	    });
 	    photolayout.add(images);
-	    console.log(photolayout.breakpoints());
-	    $style.html(photolayout.css());
+	    css = photolayout.css();
+	    $style.html(css);
+	    (0, _jquery2.default)('#css_length').html(css.length);
+	    (0, _jquery2.default)('#breakpoints').html(photolayout.breakpoints().join(', '));
 	    processing_layout = false;
 	    return reload_stats();
 	  };

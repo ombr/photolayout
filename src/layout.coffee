@@ -1,15 +1,12 @@
 `import Line from './line.coffee';`
+`import Css from './css.coffee'`
 class Layout
   #! TODO options !
   constructor: (@_zoom, @_margin = 0.0, @_selector = '.i')->
     @_margin =  @_margin * 1.0
     @_current_line = new Line(this)
     @_lines = [@_current_line]
-  min_line_ratio: ->
-    ratio = @_lines[0].ratio()
-    for line in @_lines
-      ratio = Math.min(line.ratio(), ratio)
-    return ratio
+
   add: (object)->
     if object instanceof Array
       for o in object
@@ -49,22 +46,34 @@ class Layout
       height += line.height()
     height += (@_lines.length - 1) * @_margin
     height
+  min_max_line_ratio: ->
+    min = max = @_lines[0].ratio()
+    for line in @_lines
+      min = Math.min(line.ratio(), min)
+      max = Math.max(line.ratio(), max)
+    return [min, max]
   css: ->
-    # "#{@_selector}{ position: absolute; }\n\
-    "#{@_selector}{float: left; margin: 0 #{@_margin}% #{@_margin}% 0; }\n\
-    #{@css_for_items()}\
-    .layout-container{ padding-bottom: #{@height()}% }"
+    (new Css)
+      .add_rules(@_selector, {
+        float: 'left',
+        margin: "0 #{@_margin}% #{@_margin}% 0"
+      })
+      .add_block(@css_for_items())
+      .css()
+    # .layout-container{ padding-bottom: #{@height()}% }"
+    # css.add_rule(@_selector, 'position', 'absolute')
   css_for_items: ->
-    css=''
-    items = @getItems()
-    for item in items
-      # css += "#{@_selector}#{item.o.id}{width: #{item.w}%; padding-top: #{item.h}%;}\n"
-      css += "#{@_selector}#{item.o.id}{top: #{item.offset_y}%; left: #{item.offset_x}%;width: #{item.w}%; padding-top: #{item.h}%;}\n"
+    css = new Css
     end_of_line_selectors = []
     for line in @_lines
-      [..., last] = line._objects
-      end_of_line_selectors.push("#{@_selector}#{last.id}")
-    css += "#{end_of_line_selectors.join(', ')}{ margin-right: 0; }\n"
-    css
-
+      line_selectors = []
+      for item in line.getItems()
+        selector = @_selector+item.o.id
+        css.add_rules(selector, { width: item.w+'%' })
+        line_selectors.push(selector)
+      css.add_rules(line_selectors.join(','), { 'padding-top': line.height()+'%' })
+      end_of_line_selectors.push(selector)
+    if @_margin > 0
+      css.add_rules(end_of_line_selectors.join(','), {'margin-right': 0 })
+    css.css()
 `export default Layout;`

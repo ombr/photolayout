@@ -31,12 +31,14 @@ $ ->
     processing = true
     $layout = $('body')
     photolayout = new window.photolayout.default(
-      line_height: $('#line_height').val(),
-      margin: $('#margin').val(),
+      line_height: Math.max(25, $('#line_height').val()),
+      margin: Math.max(0, Math.min(100, $('#margin').val())),
     )
     photolayout.add(images)
-    console.log photolayout.breakpoints()
-    $style.html(photolayout.css())
+    css = photolayout.css()
+    $style.html(css)
+    $('#css_length').html(css.length)
+    $('#breakpoints').html(photolayout.breakpoints().join(', '))
     processing_layout = false
     reload_stats()
 
