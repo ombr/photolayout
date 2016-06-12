@@ -20,6 +20,9 @@
     "tests",
     "src/demo*",
     "src/index*",
+    "coffelint.json",
+    "index.html",
+    "webpack.config.js",
     "package.json"
   ]
 }
