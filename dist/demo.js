@@ -56,6 +56,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _jquery = __webpack_require__(1);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
@@ -64,9 +68,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
+	var _demo = __webpack_require__(4);
+
+	var _demo2 = _interopRequireDefault(_demo);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	;
+	;
+	;
+	exports.default = {};
 	;
 	(0, _jquery2.default)(function () {
 	  var $body, $style, images, on_change, processing_images, processing_layout, reload_images, reload_layout, reload_stats;
@@ -26607,6 +26618,12 @@ return /******/ (function(modules) { // webpackBootstrap
 		return module;
 	}
 
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
 
 /***/ }
 /******/ ])

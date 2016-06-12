@@ -50,8 +50,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60,7 +61,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _layout = __webpack_require__(4);
+	var _layout = __webpack_require__(8);
 
 	var _layout2 = _interopRequireDefault(_layout);
 
@@ -141,10 +142,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = ResponsiveLayout;
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */
+
+/***/ 8:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -153,7 +152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _line = __webpack_require__(5);
+	var _line = __webpack_require__(9);
 
 	var _line2 = _interopRequireDefault(_line);
 
@@ -286,7 +285,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 
 /***/ },
-/* 5 */
+
+/***/ 9:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -378,6 +378,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Line;
 
 /***/ }
-/******/ ])
+
+/******/ })
 });
 ;

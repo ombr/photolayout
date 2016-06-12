@@ -1,5 +1,7 @@
 `import $ from 'jquery';`
 `import _ from 'lodash';`
+`import css from './demo.sass';`
+`export default {};`
 $ ->
   $style = $('<style></style>')
   $body = $('body')
