@@ -19,6 +19,7 @@
     "test",
     "tests",
     "src/demo*",
-    "src/index*"
+    "src/index*",
+    "package.json"
   ]
 }
