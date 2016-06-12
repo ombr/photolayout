@@ -7,8 +7,11 @@ class Line
     return true if 1/@calculate_ratio_with(object) > @_layout._zoom
     false
   ratio: ->
-    if Math.abs( @_objects_ratio - 1/@_layout._zoom) / @_objects_ratio > 1
-      1/@_layout._zoom
+    if @_layout._lines.indexOf(this) == @_layout._lines.length-1
+      if Math.abs( @_objects_ratio - 1/@_layout._zoom) / @_objects_ratio > 1
+        1/@_layout._zoom
+      else
+        @_objects_ratio
     else
       @_objects_ratio
   height: ->
