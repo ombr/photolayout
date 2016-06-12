@@ -1,14 +1,9 @@
 # Photolayout
 
-[![NPM version][npm-image]][npm-url]
-
 # Introduction
 
-WIP
-
-# Getting Started
-
-WIP
+A super-fast responsive library for positioning images, preserve ratio and
+order.
 
 # Installation
 
