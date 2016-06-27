@@ -76,7 +76,10 @@ class Layout
         selector = @_config.selector()+item.o.id
         css.add_rules(selector, { width: item.w+'%' })
         line_selectors.push(selector)
-      css.add_rules(line_selectors.join(','), { 'padding-top': line.height()+'%' })
+      css.add_rules(
+        line_selectors.join(','),
+        { 'padding-top': line.height()+'%' }
+      )
       end_of_line_selectors.push(selector)
     if @_config.margin() > 0
       css.add_rules(end_of_line_selectors.join(','), {'margin-right': 0 })

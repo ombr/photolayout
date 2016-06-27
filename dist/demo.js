@@ -114,7 +114,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    processing = true;
 	    $layout = (0, _jquery2.default)('body');
-	    photolayout = new window.photolayout["default"]({
+	    photolayout = new window.photolayout["default"].ResponsiveLayout({
 	      line_height: Math.max(25, (0, _jquery2.default)('#line_height').val()),
 	      margin: Math.max(0, Math.min(100, (0, _jquery2.default)('#margin').val()))
 	    });

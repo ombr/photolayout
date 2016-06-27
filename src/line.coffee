@@ -13,12 +13,9 @@ class Line
     false
   ratio: ->
     if @_layout._lines.indexOf(this) == @_layout._lines.length-1
-      if Math.abs( @_objects_ratio - 1/@_config.zoom()) / @_objects_ratio > 1
-        1/@_config.zoom()
-      else
-        @_objects_ratio
-    else
-      @_objects_ratio
+      if 1/@_config.zoom() > @_objects_ratio
+        return 1/@_config.zoom()
+    @_objects_ratio
   height: ->
     return 0 if @_objects.length == 0
     return 100.0 / @ratio()
