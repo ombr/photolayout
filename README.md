@@ -7,11 +7,27 @@ order.
 
 # Installation
 
-npm:
+### npm
 `npm install --save photolayout`
 
-bower:
+### bower
 `bower install --save webpack`
+
+### ruby
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'photolayout'
+```
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install photolayout
 
 # Examples
 

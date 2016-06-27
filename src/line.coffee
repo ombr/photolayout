@@ -1,15 +1,20 @@
+`import Configuration from './configuration.coffee';`
 class Line
-  constructor: (@_layout)->
+  constructor: (config, @_layout)->
+    if config instanceof Configuration
+      @_config = config
+    else
+      @_config = new Configuration(config)
     @_objects = []
     @_objects_ratio = 0
   accept: (object)->
     return true if @_objects.length == 0
-    return true if 1/@calculate_ratio_with(object) > @_layout._zoom
+    return true if 1/@calculate_ratio_with(object) > @_config.zoom()
     false
   ratio: ->
     if @_layout._lines.indexOf(this) == @_layout._lines.length-1
-      if Math.abs( @_objects_ratio - 1/@_layout._zoom) / @_objects_ratio > 1
-        1/@_layout._zoom
+      if Math.abs( @_objects_ratio - 1/@_config.zoom()) / @_objects_ratio > 1
+        1/@_config.zoom()
       else
         @_objects_ratio
     else
@@ -27,7 +32,7 @@ class Line
     return [] if @_objects.length == 0
     items = []
     offset_x = 0
-    line_width = 100.0 - ((@_objects.length - 1) * @_layout._margin)
+    line_width = 100.0 - ((@_objects.length - 1) * @_config.margin())
     ratio = @ratio()
     line_height = line_width / ratio
     for object in  @_objects
@@ -40,7 +45,7 @@ class Line
         offset_x: offset_x
         offset_y: offset_y
       })
-      offset_x += width + @_layout._margin
+      offset_x += width + @_config.margin()
     items
   calculate_ratio_with: (object)->
     @_objects_ratio + @object_ratio(object)

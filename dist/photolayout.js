@@ -64,92 +64,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _layout2 = _interopRequireDefault(_layout);
 
+	var _responsivelayout = __webpack_require__(11);
+
+	var _responsivelayout2 = _interopRequireDefault(_responsivelayout);
+
 	var _css = __webpack_require__(10);
 
 	var _css2 = _interopRequireDefault(_css);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var ResponsiveLayout;
+	var photolayout;
 
-	ResponsiveLayout = function () {
-	  function ResponsiveLayout(_options) {
-	    var base;
-	    this._options = _options != null ? _options : {};
-	    (base = this._options).line_height || (base.line_height = 200);
-	    if (this._options.margin == null) {
-	      this._options.margin = 5;
-	    }
-	    if (this._options.max_width == null) {
-	      this._options.max_width = 2500;
-	    }
-	    if (this._options.min_width == null) {
-	      this._options.min_width = 200;
-	    }
-	    if (this._options.tolerance == null) {
-	      this._options.tolerance = 0.3;
-	    }
-	    this._photos = [];
-	    this._layouts = void 0;
-	  }
+	photolayout = {
+	  Layout: _layout2.default,
+	  ResponsiveLayout: _responsivelayout2.default
+	};
 
-	  ResponsiveLayout.prototype.getLayouts = function () {
-	    var layout, max, min, ref, tolerance, width;
-	    if (this._layouts != null) {
-	      return this._layouts;
-	    }
-	    this._layouts = {};
-	    width = this._options.max_width;
-	    while (width > this._options.min_width) {
-	      layout = new _layout2.default(this._options.line_height / width, this._options.margin / width * 100);
-	      layout.add(this._photos);
-	      this._layouts[width] = layout;
-	      ref = layout.min_max_line_ratio(), min = ref[0], max = ref[1];
-	      tolerance = width - width * this._options.tolerance;
-	      width -= Math.round(tolerance / min);
-	    }
-	    return this._layouts;
-	  };
-
-	  ResponsiveLayout.prototype.add = function (photo) {
-	    var i, len, p;
-	    if (photo instanceof Array) {
-	      for (i = 0, len = photo.length; i < len; i++) {
-	        p = photo[i];
-	        this.add(p);
-	      }
-	      return this;
-	    }
-	    this._photos.push(photo);
-	    this._layouts = void 0;
-	    return this;
-	  };
-
-	  ResponsiveLayout.prototype.layout_for = function (width) {
-	    return layout;
-	  };
-
-	  ResponsiveLayout.prototype.breakpoints = function () {
-	    return Object.keys(this.getLayouts()).sort(function (a, b) {
-	      return b - a;
-	    });
-	  };
-
-	  ResponsiveLayout.prototype.css = function () {
-	    var css, i, len, ref, width;
-	    css = new _css2.default();
-	    ref = this.breakpoints();
-	    for (i = 0, len = ref.length; i < len; i++) {
-	      width = ref[i];
-	      css.add_block(this._layouts[width].css(), "@media (max-width: " + width + "px)");
-	    }
-	    return css.css();
-	  };
-
-	  return ResponsiveLayout;
-	}();
-
-	exports.default = ResponsiveLayout;
+	exports.default = photolayout;
 
 /***/ },
 /* 1 */,
@@ -460,6 +392,107 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 	exports.default = Css;
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _layout = __webpack_require__(8);
+
+	var _layout2 = _interopRequireDefault(_layout);
+
+	var _css = __webpack_require__(10);
+
+	var _css2 = _interopRequireDefault(_css);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ResponsiveLayout;
+
+	ResponsiveLayout = function () {
+	  function ResponsiveLayout(_options) {
+	    var base;
+	    this._options = _options != null ? _options : {};
+	    (base = this._options).line_height || (base.line_height = 200);
+	    if (this._options.margin == null) {
+	      this._options.margin = 5;
+	    }
+	    if (this._options.max_width == null) {
+	      this._options.max_width = 2500;
+	    }
+	    if (this._options.min_width == null) {
+	      this._options.min_width = 200;
+	    }
+	    if (this._options.tolerance == null) {
+	      this._options.tolerance = 0.3;
+	    }
+	    this._photos = [];
+	    this._layouts = void 0;
+	  }
+
+	  ResponsiveLayout.prototype.getLayouts = function () {
+	    var layout, max, min, ref, tolerance, width;
+	    if (this._layouts != null) {
+	      return this._layouts;
+	    }
+	    this._layouts = {};
+	    width = this._options.max_width;
+	    while (width > this._options.min_width) {
+	      layout = new _layout2.default(this._options.line_height / width, this._options.margin / width * 100);
+	      layout.add(this._photos);
+	      this._layouts[width] = layout;
+	      ref = layout.min_max_line_ratio(), min = ref[0], max = ref[1];
+	      tolerance = width - width * this._options.tolerance;
+	      width -= Math.round(tolerance / min);
+	    }
+	    return this._layouts;
+	  };
+
+	  ResponsiveLayout.prototype.add = function (photo) {
+	    var i, len, p;
+	    if (photo instanceof Array) {
+	      for (i = 0, len = photo.length; i < len; i++) {
+	        p = photo[i];
+	        this.add(p);
+	      }
+	      return this;
+	    }
+	    this._photos.push(photo);
+	    this._layouts = void 0;
+	    return this;
+	  };
+
+	  ResponsiveLayout.prototype.layout_for = function (width) {
+	    return layout;
+	  };
+
+	  ResponsiveLayout.prototype.breakpoints = function () {
+	    return Object.keys(this.getLayouts()).sort(function (a, b) {
+	      return b - a;
+	    });
+	  };
+
+	  ResponsiveLayout.prototype.css = function () {
+	    var css, i, len, ref, width;
+	    css = new _css2.default();
+	    ref = this.breakpoints();
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      width = ref[i];
+	      css.add_block(this._layouts[width].css(), "@media (max-width: " + width + "px)");
+	    }
+	    return css.css();
+	  };
+
+	  return ResponsiveLayout;
+	}();
+
+	exports.default = ResponsiveLayout;
 
 /***/ }
 /******/ ])

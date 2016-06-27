@@ -30,7 +30,7 @@ $ ->
     return if processing_layout
     processing = true
     $layout = $('body')
-    photolayout = new window.photolayout.default(
+    photolayout = new window.photolayout.default.ResponsiveLayout(
       line_height: Math.max(25, $('#line_height').val()),
       margin: Math.max(0, Math.min(100, $('#margin').val())),
     )

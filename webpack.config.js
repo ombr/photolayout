@@ -3,8 +3,8 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   entry: {
-    photolayout: "./src/responsivelayout.coffee",
-    "photolayout.min": "./src/responsivelayout.coffee",
+    photolayout: "./src/photolayout.coffee",
+    "photolayout.min": "./src/photolayout.coffee",
     "demo": "./src/demo.coffee",
     "demo.min": "./src/demo.coffee"
   },

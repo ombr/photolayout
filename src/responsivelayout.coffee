@@ -1,27 +1,31 @@
 `import Layout from './layout.coffee'`
 `import Css from './css.coffee'`
+`import Configuration from './configuration.coffee';`
 class ResponsiveLayout
-  constructor: (@_options = {})->
-    @_options.line_height ||= 200
-    @_options.margin = 5 unless @_options.margin?
-    @_options.max_width = 2500 unless @_options.max_width?
-    @_options.min_width = 200 unless @_options.min_width?
-    @_options.tolerance = 0.3 unless @_options.tolerance?
+  constructor: (config)->
+    if config instanceof Configuration
+      @_config = config
+    else
+      @_config = new Configuration(config)
     @_photos = []
     @_layouts = undefined
   getLayouts: ->
     return @_layouts if @_layouts?
     @_layouts = {}
-    width = @_options.max_width
-    while width > @_options.min_width
+    width = @_config.max_width()
+    while width > @_config.min_width()
+      console.log @_config.to_hash()
+      console.log @_config.derivate(zoom: 100).to_hash()
       layout = new Layout(
-        @_options.line_height/width,
-        @_options.margin/width*100
+        @_config.derivate(
+          zoom: @_config.line_height()/width,
+          margin: @_config.margin()/width*100
+        )
       )
       layout.add(@_photos)
       @_layouts[width] = layout
       [min, max] = layout.min_max_line_ratio()
-      tolerance =  width - width * @_options.tolerance
+      tolerance =  width - width * @_config.tolerance()
       width -= Math.round(tolerance / min)
     @_layouts
   add: (photo)->
