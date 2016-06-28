@@ -1,6 +1,6 @@
 {
   "name": "photolayout",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Photolayout from Evlaa",
   "main": "dist/photolayout.js",
   "scripts": {
