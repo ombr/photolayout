@@ -14,8 +14,6 @@ class ResponsiveLayout
     @_layouts = {}
     width = @_config.max_width()
     while width > @_config.min_width()
-      console.log @_config.to_hash()
-      console.log @_config.derivate(zoom: 100).to_hash()
       layout = new Layout(
         @_config.derivate(
           zoom: @_config.line_height()/width,

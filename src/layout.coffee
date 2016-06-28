@@ -8,7 +8,6 @@ class Layout
       @_config = config
     else
       @_config = new Configuration(config)
-    console.log @_config
     @_current_line = new Line(@_config, this)
     @_lines = [@_current_line]
 
@@ -31,7 +30,7 @@ class Layout
       for line in @_lines
         for item in line.getItems(offset_y)
           items.push(item)
-        offset_y += item.h + @_config.margin()
+        offset_y += item.h + @_config.margin() if item?
       return items
     raise 'ERROR '
     for line in @_lines
@@ -84,4 +83,8 @@ class Layout
     if @_config.margin() > 0
       css.add_rules(end_of_line_selectors.join(','), {'margin-right': 0 })
     css.css()
+Layout.layout = (config, items)->
+  layout = new Layout(config)
+  layout.add(items)
+  layout.getItems()
 `export default Layout;`

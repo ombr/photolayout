@@ -106,7 +106,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _line = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./line.coffee\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _line = __webpack_require__(9);
 
 	var _line2 = _interopRequireDefault(_line);
 
@@ -132,7 +132,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else {
 	      this._config = new _configuration2.default(config);
 	    }
-	    console.log(this._config);
 	    this._current_line = new _line2.default(this._config, this);
 	    this._lines = [this._current_line];
 	  }
@@ -172,7 +171,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          item = ref1[j];
 	          items.push(item);
 	        }
-	        offset_y += item.h + this._config.margin();
+	        if (item != null) {
+	          offset_y += item.h + this._config.margin();
+	        }
 	      }
 	      return items;
 	    }
@@ -262,11 +263,123 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Layout;
 	}();
 
+	Layout.layout = function (config, items) {
+	  var layout;
+	  layout = new Layout(config);
+	  layout.add(items);
+	  return layout.getItems();
+	};
+
 	exports.default = Layout;
 	;
 
 /***/ },
-/* 9 */,
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _configuration = __webpack_require__(10);
+
+	var _configuration2 = _interopRequireDefault(_configuration);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	;
+	var Line;
+
+	Line = function () {
+	  function Line(config, _layout) {
+	    this._layout = _layout;
+	    if (config instanceof _configuration2.default) {
+	      this._config = config;
+	    } else {
+	      this._config = new _configuration2.default(config);
+	    }
+	    this._objects = [];
+	    this._objects_ratio = 0;
+	  }
+
+	  Line.prototype.accept = function (object) {
+	    if (this._objects.length === 0) {
+	      return true;
+	    }
+	    if (1 / this.calculate_ratio_with(object) > this._config.zoom()) {
+	      return true;
+	    }
+	    return false;
+	  };
+
+	  Line.prototype.ratio = function () {
+	    if (this._layout._lines.indexOf(this) === this._layout._lines.length - 1) {
+	      if (1 / this._config.zoom() > this._objects_ratio) {
+	        return 1 / this._config.zoom();
+	      }
+	    }
+	    return this._objects_ratio;
+	  };
+
+	  Line.prototype.height = function () {
+	    if (this._objects.length === 0) {
+	      return 0;
+	    }
+	    return 100.0 / this.ratio();
+	  };
+
+	  Line.prototype.add = function (object) {
+	    if (this._objects.length === 0) {
+	      this._objects_ratio = this.object_ratio(object);
+	    } else {
+	      this._objects_ratio += this.object_ratio(object);
+	    }
+	    return this._objects.push(object);
+	  };
+
+	  Line.prototype.getItems = function (offset_y) {
+	    var i, items, len, line_height, line_width, object, object_ratio, offset_x, ratio, ref, width;
+	    if (this._objects.length === 0) {
+	      return [];
+	    }
+	    items = [];
+	    offset_x = 0;
+	    line_width = 100.0 - (this._objects.length - 1) * this._config.margin();
+	    ratio = this.ratio();
+	    line_height = line_width / ratio;
+	    ref = this._objects;
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      object = ref[i];
+	      object_ratio = this.object_ratio(object);
+	      width = line_height * object_ratio;
+	      items.push({
+	        o: object,
+	        w: width,
+	        h: line_height,
+	        offset_x: offset_x,
+	        offset_y: offset_y
+	      });
+	      offset_x += width + this._config.margin();
+	    }
+	    return items;
+	  };
+
+	  Line.prototype.calculate_ratio_with = function (object) {
+	    return this._objects_ratio + this.object_ratio(object);
+	  };
+
+	  Line.prototype.object_ratio = function (object) {
+	    return object.ratio;
+	  };
+
+	  return Line;
+	}();
+
+	exports.default = Line;
+
+/***/ },
 /* 10 */
 /***/ function(module, exports) {
 
@@ -443,10 +556,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._layouts = {};
 	    width = this._config.max_width();
 	    while (width > this._config.min_width()) {
-	      console.log(this._config.to_hash());
-	      console.log(this._config.derivate({
-	        zoom: 100
-	      }).to_hash());
 	      layout = new _layout2.default(this._config.derivate({
 	        zoom: this._config.line_height() / width,
 	        margin: this._config.margin() / width * 100
